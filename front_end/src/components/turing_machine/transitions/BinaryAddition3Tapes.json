@@ -1,0 +1,31 @@
+{
+  "tapeCount": 3,
+  "initialTapes": [
+    ["_", "1", "0", "1", "_"],
+    ["_", "1", "1", "1", "_"],
+    ["_", "_", "_", "_", "_"]
+  ],
+  "transitions": {
+    "q0": {
+      "000": { "newState": "q0", "writeSymbols": ["0", "0", "0"], "directions": ["R", "R", "R"] },
+      "001": { "newState": "q0", "writeSymbols": ["1", "0", "0"], "directions": ["R", "R", "R"] },
+      "010": { "newState": "q0", "writeSymbols": ["0", "1", "0"], "directions": ["R", "R", "R"] },
+      "011": { "newState": "q0", "writeSymbols": ["1", "1", "0"], "directions": ["R", "R", "R"] },
+      "100": { "newState": "q0", "writeSymbols": ["0", "0", "1"], "directions": ["R", "R", "R"] },
+      "101": { "newState": "q0", "writeSymbols": ["1", "0", "1"], "directions": ["R", "R", "R"] },
+      "110": { "newState": "q0", "writeSymbols": ["0", "1", "1"], "directions": ["R", "R", "R"] },
+      "111": { "newState": "q0", "writeSymbols": ["1", "1", "1"], "directions": ["R", "R", "R"] },
+      "___": { "newState": "q1", "writeSymbols": ["_", "_", "_"], "directions": ["L", "L", "L"] }
+    },
+    "q1": {
+      "000": { "newState": "qf", "writeSymbols": ["_", "_", "_"], "directions": ["N", "N", "N"] },
+      "001": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] },
+      "010": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] },
+      "011": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] },
+      "100": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] },
+      "101": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] },
+      "110": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] },
+      "111": { "newState": "q1", "writeSymbols": ["_", "1", "1"], "directions": ["N", "N", "N"] }
+    }
+  }
+}

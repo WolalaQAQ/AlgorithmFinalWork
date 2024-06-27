@@ -1,0 +1,26 @@
+{
+  "tapeCount": 1,
+  "init": "q0",
+  "initialTapes": [
+    ["1", "0", "1", "1", "_"]
+  ],
+  "transitions": {
+    "q0": {
+      "0": {
+        "newState": "q0",
+        "writeSymbols": ["1"],
+        "directions": ["R"]
+      },
+      "1": {
+        "newState": "q0",
+        "writeSymbols": ["0"],
+        "directions": ["R"]
+      },
+      "_": {
+        "newState": "qf",
+        "writeSymbols": ["_"],
+        "directions": ["N"]
+      }
+    }
+  }
+}

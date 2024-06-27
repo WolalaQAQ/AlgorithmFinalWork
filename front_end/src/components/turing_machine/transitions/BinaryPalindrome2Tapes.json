@@ -1,0 +1,29 @@
+{
+  "init": "qCopy",
+  "tapeCount": 2,
+  "initialTapes": [
+    ["_", "1", "0", "1", "0", "1", "_"],
+    ["_", "_", "_", "_", "_", "_", "_"]
+  ],
+  "transitions": {
+    "qCopy": {
+      "0_": { "newState": "qCopy", "writeSymbols": ["0", "0"], "directions": ["R", "R"] },
+      "1_": { "newState": "qCopy", "writeSymbols": ["1", "1"], "directions": ["R", "R"] },
+      "__": { "newState": "qReturn", "writeSymbols": ["_", "_"], "directions": ["N", "L"] }
+    },
+    "qReturn": {
+      "_0": { "newState": "qReturn", "writeSymbols": ["_", "0"], "directions": ["N", "L"] },
+      "_1": { "newState": "qReturn", "writeSymbols": ["_", "1"], "directions": ["N", "L"] },
+      "__": { "newState": "qTest", "writeSymbols": ["_", "_"], "directions": ["L", "R"] }
+    },
+    "qTest": {
+      "00": { "newState": "qTest", "writeSymbols": ["0", "0"], "directions": ["L", "R"] },
+      "11": { "newState": "qTest", "writeSymbols": ["1", "1"], "directions": ["L", "R"] },
+      "01": { "newState": "qReject", "writeSymbols": ["0", "1"], "directions": ["N", "N"] },
+      "10": { "newState": "qReject", "writeSymbols": ["1", "0"], "directions": ["N", "N"] },
+      "__": { "newState": "qAccept", "writeSymbols": ["_", "_"], "directions": ["N", "N"] }
+    },
+    "qAccept": {},
+    "qReject": {}
+  }
+}
