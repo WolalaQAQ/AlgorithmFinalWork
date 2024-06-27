@@ -8,13 +8,18 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "vite",
-    "server": "node server/transitions_server.mjs"
+    "start": "vite"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
+    "@ant-design/pro-components": "^2.7.10",
+    "antd": "^5.18.3",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "framer-motion": "^11.2.12",
     "prop-types": "^15.8.1",
+    "rc-queue-anim": "^2.0.0",
+    "rc-tween-one": "^3.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.24.0"

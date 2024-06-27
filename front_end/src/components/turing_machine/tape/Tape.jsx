@@ -1,85 +1,37 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import './Tape.css';
+import { Input } from 'antd';
 
-const Tape = ({ tapes, headPositions, onContentChange, locked }) => {
-    const handleContentChange = (tapeIndex, cellIndex, newValue) => {
-        if (locked) return;
-        const newTapes = tapes.map((tape, i) =>
-            i === tapeIndex ? tape.map((cell, j) => (j === cellIndex ? (newValue === '' ? '_' : newValue) : cell)) : tape
-        );
-        onContentChange(newTapes);
+const Tape = ({ tape, head }) => {
+    const [tapeContent, setTapeContent] = useState(tape);
+    const [headPosition, setHeadPosition] = useState(head);
+
+    const handleTapeChange = (event) => {
+        setTapeContent(event.target.value);
     };
 
-    const handleAddLeft = (tapeIndex) => {
-        if (locked) return;
-        const newTapes = tapes.map((tape, i) =>
-            i === tapeIndex ? ['_', ...tape] : tape
-        );
-        onContentChange(newTapes);
-    };
-
-    const handleAddRight = (tapeIndex) => {
-        if (locked) return;
-        const newTapes = tapes.map((tape, i) =>
-            i === tapeIndex ? [...tape, '_'] : tape
-        );
-        onContentChange(newTapes);
-    };
-
-    const handleDelete = (tapeIndex, cellIndex) => {
-        if (locked || tapes[tapeIndex].length <= 1) return;
-        const newTapes = tapes.map((tape, i) =>
-            i === tapeIndex ? tape.filter((_, j) => j !== cellIndex) : tape
-        );
-        onContentChange(newTapes);
+    const handleHeadChange = (event) => {
+        setHeadPosition(event.target.value);
     };
 
     return (
         <div>
-            {tapes.map((tape, tapeIndex) => (
-                <div key={tapeIndex} className="tape-container">
-                    {!locked && (
-                        <div className="tape-cell add-cell" onClick={() => handleAddLeft(tapeIndex)}>
-                            +
-                        </div>
-                    )}
-                    {tape.map((symbol, cellIndex) => (
-                        <div
-                            key={cellIndex}
-                            className={`tape-cell ${cellIndex === headPositions[tapeIndex] ? 'head' : ''}`}
-                        >
-                            <input
-                                type="text"
-                                value={symbol === '_' ? '' : symbol}
-                                onChange={(e) => handleContentChange(tapeIndex, cellIndex, e.target.value)}
-                                maxLength="1"
-                                style={{ width: '100%', height: '100%', textAlign: 'center', border: 'none', background: 'none' }}
-                                disabled={locked}
-                            />
-                            {!locked && (
-                                <button className="delete-cell" onClick={() => handleDelete(tapeIndex, cellIndex)}>
-                                    x
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                    {!locked && (
-                        <div className="tape-cell add-cell" onClick={() => handleAddRight(tapeIndex)}>
-                            +
-                        </div>
-                    )}
-                </div>
-            ))}
+            <label>
+                磁带内容：
+                <Input size="large" type="text" value={tapeContent} onChange={handleTapeChange} />
+            </label>
+            <br />
+            <label>
+                头位置：
+                <Input size="large" type="text" value={headPosition} onChange={handleHeadChange} />
+            </label>
         </div>
     );
-};
-
-Tape.propTypes = {
-    tapes: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    headPositions: PropTypes.arrayOf(PropTypes.number).isRequired,
-    onContentChange: PropTypes.func.isRequired,
-    locked: PropTypes.bool.isRequired,
-};
+}
 
 export default Tape;
+
+Tape.propTypes = {
+    tape: PropTypes.string.isRequired,
+    head: PropTypes.string.isRequired
+};

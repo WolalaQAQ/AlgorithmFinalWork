@@ -1,9 +1,19 @@
+import BasePage from "../base_class/BasePage.jsx";
+
 const RecursiveFunctionPage = () => {
+    const header = (
+        <h1>递归函数仿真</h1>
+    );
+
+    const content = (
+        <div>
+            递归函数
+        </div>
+    );
+
     return (
         <div>
-            <h1>Recursive Function Simulation</h1>
-            <p>This is the Recursive Function simulation page.</p>
-            {/* 你可以在这里添加递归函数仿真的具体内容 */}
+            <BasePage header={header} content={content} />
         </div>
     );
 };
