@@ -1,9 +1,9 @@
-import BasePage from "../base_class/BasePage.jsx";
-import SplashScreen from "../animation/SplashScreen.jsx";
+import BasePage from "../base_page/BasePage.tsx";
+import SplashScreen from "../animation/SplashScreen.tsx";
 import {useEffect, useState} from "react";
 
 const HomePage = () => {
-    const [showSplash, setShowSplash] = useState(true);
+    const [showSplash, setShowSplash] = useState<boolean>(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -14,7 +14,7 @@ const HomePage = () => {
     }, []);
 
     if (showSplash) {
-        return <SplashScreen onFinished={() => setShowSplash(false)} />;
+        return <SplashScreen displayText="Welcome to Algorithm Finalwork!" onFinished={() => setShowSplash(false)} />;
     }
 
     const header = (

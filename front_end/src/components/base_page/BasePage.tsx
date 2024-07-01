@@ -1,16 +1,29 @@
-import NavPage from "../nav/NavPage.jsx";
-import {useState} from "react";
+import NavPage from "../nav/NavPage.tsx";
+import React, {useEffect, useState} from "react";
 import {Layout, theme} from "antd";
-import PropTypes from "prop-types";
 
 const {Header, Content, Footer, Sider} = Layout;
 
-const BasePage = ({header, content}) => {
-    const [collapsed, setCollapsed] = useState(false);
+interface BasePageProps {
+    header: React.ReactNode;
+    content: React.ReactNode;
+}
+
+const BasePage : React.FC<BasePageProps> = ({header, content}) => {
+    const [collapsed, setCollapsed] = useState<boolean>(() => {
+        // 初始状态从 localStorage 读取
+        const savedState = localStorage.getItem('siderCollapsed');
+        return savedState !== null ? JSON.parse(savedState) : false;
+    });
 
     const {
         token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();
+
+    useEffect(() => {
+        // 每次折叠状态改变时，更新 localStorage
+        localStorage.setItem('siderCollapsed', JSON.stringify(collapsed));
+    }, [collapsed]);
 
     return (
         <Layout
@@ -74,8 +87,3 @@ const BasePage = ({header, content}) => {
 };
 
 export default BasePage;
-
-BasePage.propTypes = {
-    header: PropTypes.element.isRequired,
-    content: PropTypes.element.isRequired,
-}

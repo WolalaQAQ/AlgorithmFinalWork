@@ -1,4 +1,4 @@
-import BasePage from "../base_class/BasePage.jsx";
+import BasePage from "../base_page/BasePage.tsx";
 
 const RecursiveFunctionPage = () => {
     const header = (

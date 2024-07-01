@@ -1,8 +1,13 @@
 import { motion } from 'framer-motion';
 import { Button } from 'antd';
-import PropTypes from "prop-types";
+import React from "react";
 
-const SplashScreen = ({ onFinished }) => {
+interface SplashScreenProps {
+    displayText: string;
+    onFinished: () => void;
+}
+
+const SplashScreen : React.FC<SplashScreenProps> = ({ displayText, onFinished }) => {
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -13,7 +18,7 @@ const SplashScreen = ({ onFinished }) => {
         >
             <motion.div initial={{ y: -100 }} animate={{ y: 0 }} transition={{ delay: 0.5 }}>
                 <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '2em', marginBottom: '20px'}}>Welcome to My App</div>
+                    <div style={{ fontSize: '2em', marginBottom: '20px'}}>{displayText}</div>
                     <Button type="primary" onClick={onFinished}>Get Started</Button>
                 </div>
             </motion.div>
@@ -22,7 +27,3 @@ const SplashScreen = ({ onFinished }) => {
 };
 
 export default SplashScreen;
-
-SplashScreen.propTypes = {
-    onFinished: PropTypes.func.isRequired
-}
