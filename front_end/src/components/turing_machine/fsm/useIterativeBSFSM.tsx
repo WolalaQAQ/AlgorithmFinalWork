@@ -1,16 +1,16 @@
 import {useState} from "react";
-import {BinarySearchFSMClass, FSMHistory} from "./BinarySearchFSMClass.tsx";
-import {TapeClass} from "../tape/TapeClass.tsx";
+import {IterativeBSFSMClass, FSMHistory} from "./IterativeBSFSMClass.tsx";
+import {TapeClass} from "../../tape/TapeClass.tsx";
 
-interface UseBinarySearchFSM {
-    fsm: BinarySearchFSMClass;
+interface UseIterativeBSFSM {
+    fsm: IterativeBSFSMClass;
     configureTape: (inputTape: TapeClass) => void;
     reset: () => void;
     calcHistory: () => FSMHistory;
 }
 
-const useBinarySearchFSM = (): UseBinarySearchFSM => {
-    const [fsm, setFSM] = useState(new BinarySearchFSMClass());
+const useIterativeBSFSM = (): UseIterativeBSFSM => {
+    const [fsm, setFSM] = useState(new IterativeBSFSMClass());
 
     const configureTape = (inputTape: TapeClass) => {
         fsm.configureTape(inputTape);
@@ -31,4 +31,4 @@ const useBinarySearchFSM = (): UseBinarySearchFSM => {
     return {fsm, configureTape, reset, calcHistory};
 }
 
-export default useBinarySearchFSM;
+export default useIterativeBSFSM;

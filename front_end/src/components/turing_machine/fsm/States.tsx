@@ -8,5 +8,6 @@ export const States = Object.freeze({
     CALC_MID: 'qCalcMid',
     COMPARE: 'qCompare',
     SUCCESS: 'qSuccess',
-    FAIL: 'qFail'
+    FAIL: 'qFail',
+    FINISH: 'qFinish'
 });

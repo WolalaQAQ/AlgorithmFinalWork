@@ -1,22 +1,24 @@
 import {useState} from 'react';
 import {Alert, Button, Layout, Row, theme} from 'antd';
-import TapeComponent from './tape/TapeComponent.js';
+import TapeComponent from '../tape/TapeComponent.js';
 
-import useTapes from './tape/useTapes.js';
-import useBinarySearchFSM from "./state_machine/useBinarySearchFSM.tsx";
-import {TapeClass} from "./tape/TapeClass.tsx";
-import { FSMHistory } from "./state_machine/BinarySearchFSMClass.tsx";
+import useTapes from '../tape/useTapes.js';
+import useIterativeBSFSM from "./fsm/useIterativeBSFSM.tsx";
+import {TapeClass} from "../tape/TapeClass.tsx";
+import {FSMHistory} from "./fsm/IterativeBSFSMClass.tsx";
 
 const TuringMachine = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [step, setStep] = useState(0);
     const [fsmHistory, setFsmHistory] = useState<FSMHistory>({});
     const {tapes, addTape, removeTape, updateTapeContent, updateHeads} = useTapes([
-        new TapeClass([0,9,7,0,1,2,3,4,5,6,7,8,9], new Set([0])),
+        new TapeClass([0, 9, 7, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9], new Set([0])),
+        new TapeClass(),
+        new TapeClass(),
     ]);
-    const {fsm, configureTape, reset, calcHistory} = useBinarySearchFSM();
+    const {fsm, configureTape, reset, calcHistory} = useIterativeBSFSM();
 
-    const updateTapes = (step : number) => {
+    const updateTapes = (step: number) => {
         const current = fsmHistory[step];
         const inputTape = current.inputTape;
         const workTape = current.workTape;
@@ -32,10 +34,20 @@ const TuringMachine = () => {
     }
 
     const handleRun = () => {
-        if (tapes.length !== 3 || tapes[0].content.length < 4 || tapes[1].content.length !== 0 || tapes[2].content.length !== 0) {
+        if (tapes[0].content.length < 4) {
             setAlertMessage('请添加合法的纸带');
             return;
         }
+        while (tapes.length > 3) {
+            removeTape(tapes.length - 1);
+        }
+        while (tapes.length < 3) {
+            addTape();
+        }
+
+        tapes[1] = new TapeClass();
+        tapes[2] = new TapeClass();
+
         setAlertMessage('');
         configureTape(tapes[0]);
         setFsmHistory(calcHistory());
@@ -101,6 +113,17 @@ const TuringMachine = () => {
                     下一步
                 </Button>
             </Row>
+            <Layout style={{
+                padding: 20,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                当前步数: {step}
+                <br/>
+                当前状态: {fsmHistory[step]?.state}
+            </Layout>
             {alertMessage && (
                 <Alert
                     message="错误"

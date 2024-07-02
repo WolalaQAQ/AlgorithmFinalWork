@@ -27,4 +27,9 @@ export class TapeClass {
         return this.heads_;
     }
 
+    writeContent(index: number, value: number) {
+        this.heads_ = new Set([index]);
+        this.content_[index] = value;
+    }
+
 }
