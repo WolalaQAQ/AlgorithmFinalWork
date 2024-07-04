@@ -1,7 +1,7 @@
-import { StatesKP } from "@class/fsm/knapsack/StatesKP.tsx";
+import { StatesKPDP } from "@class/fsm/knapsack/StatesKPDP.tsx";
 import { TapeClass } from "@class/tape/TapeClass.tsx";
 
-export interface KPFSMStateEntry {
+export interface KPDPFSMStateEntry {
     state: string;
     step: number;
     capacityTape: TapeClass;
@@ -10,17 +10,17 @@ export interface KPFSMStateEntry {
     resultTape: TapeClass;
 }
 
-export class KnapsackFSM {
+export class KnapsackDPFSM {
     public state_: string;
     public step_: number;
     public capacityTape_: TapeClass;
     public itemsTape_: TapeClass;
     public dpTape_: TapeClass;
     public resultTape_: TapeClass;
-    private history_: KPFSMStateEntry[] = [];
+    private history_: KPDPFSMStateEntry[] = [];
 
     constructor(capacityTape: TapeClass, itemsTape: TapeClass) {
-        this.state_ = StatesKP.START;
+        this.state_ = StatesKPDP.START;
         this.step_ = 0;
         this.capacityTape_ = capacityTape.clone();
         this.itemsTape_ = itemsTape.clone();
@@ -28,26 +28,29 @@ export class KnapsackFSM {
         this.resultTape_ = new TapeClass([0]);
     }
 
-    setStateAndSave(newState: string, itemIndex: number = -1, value: number = -1) {
+    setStateAndSave(newState: string, itemIndex: number = -1) {
         this.state_ = newState;
         switch (newState) {
-            case StatesKP.START:
+            case StatesKPDP.START:
                 break;
-            case StatesKP.READ_CAPACITY:
+            case StatesKPDP.READ_CAPACITY:
                 this.capacityTape_.heads = new Set([0]);
                 break;
-            case StatesKP.READ_ITEM_WEIGHT:
+            case StatesKPDP.READ_ITEM_WEIGHT:
                 this.itemsTape_.heads = new Set([itemIndex * 2]);
                 break;
-            case StatesKP.READ_ITEM_VALUE:
+            case StatesKPDP.READ_ITEM_VALUE:
                 this.itemsTape_.heads = new Set([itemIndex * 2 + 1]);
                 break;
-            case StatesKP.UPDATE_DP:
-                for (let w = this.capacityTape_.content[0]; w >= value; w--) {
-                    this.dpTape_.content[w] = Math.max(this.dpTape_.content[w], this.dpTape_.content[w - value] + this.itemsTape_.content[itemIndex * 2 + 1]);
+            case StatesKPDP.UPDATE_DP:
+                for (let w = this.capacityTape_.content[0]; w >= this.itemsTape_.content[itemIndex * 2]; w--) {
+                    this.dpTape_.heads = new Set([w]);
+                    this.dpTape_.content[w] = Math.max(this.dpTape_.content[w], this.dpTape_.content[w - this.itemsTape_.content[itemIndex * 2]] + this.itemsTape_.content[itemIndex * 2 + 1]);
+                    this.saveState();
+                    this.step_++;
                 }
                 break;
-            case StatesKP.FINISH:
+            case StatesKPDP.FINISH:
                 this.resultTape_.heads = new Set([0]);
                 this.resultTape_.content[0] = this.dpTape_.content[this.capacityTape_.content[0]];
                 break;

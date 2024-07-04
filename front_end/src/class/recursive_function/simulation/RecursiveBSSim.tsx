@@ -8,7 +8,7 @@ export interface RecursiveBNSimStateEntry {
     stack: RecursiveStackClass;
 }
 
-export class RecursiveBNSim {
+export class RecursiveBSSim {
     private fsm_: BinarySearchFSM;
     private history_: RecursiveBNSimStateEntry[] = [];
     private stack_: RecursiveStackClass;

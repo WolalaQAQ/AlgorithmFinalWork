@@ -4,7 +4,7 @@ import {Button, Flex, theme, Typography} from "antd";
 import useTapes from "@hooks/tape/useTapes";
 import MultiTapeComponent from "@components/tape/MultiTapeComponent";
 import {useState} from "react";
-import {RecursiveBNSim, RecursiveBNSimStateEntry} from "@class/recursive_function/simulation/RecursiveBNSim";
+import {RecursiveBSSim, RecursiveBNSimStateEntry} from "@class/recursive_function/simulation/RecursiveBSSim.tsx";
 import {LeftOutlined, PlayCircleFilled, RightOutlined} from "@ant-design/icons";
 import {TapeClass} from "@class/tape/TapeClass.tsx";
 
@@ -41,7 +41,7 @@ const RecursiveFunction = () => {
         tapes[1] = new TapeClass();
         tapes[2] = new TapeClass();
 
-        const sim = new RecursiveBNSim(tapes[0]);
+        const sim = new RecursiveBSSim(tapes[0]);
         sim.run();
         setSimHistory(sim.getHistory());
         setStep(0);

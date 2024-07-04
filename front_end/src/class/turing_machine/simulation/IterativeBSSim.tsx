@@ -6,7 +6,7 @@ export interface IterativeBSFSMStateEntry {
     BSFSMHistoryEntry: BSFSMStateEntry;
 }
 
-export class IterativeBNSim {
+export class IterativeBSSim {
     private fsm_: BinarySearchFSM;
     private targetValue_: number;
     private midValue_: number;

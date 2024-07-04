@@ -3,6 +3,7 @@ import { TapeClass } from '@class/tape/TapeClass';
 
 interface UseTapes {
     tapes: TapeClass[];
+    setTapes: (tapes: TapeClass[]) => void;
     addTape: () => void;
     removeTape: (index: number) => void;
     updateTapeContent: (index: number, content: number[]) => void;
@@ -31,7 +32,7 @@ const useTapes = (initialTapes: TapeClass[] = []) : UseTapes => {
         }));
     };
 
-    return { tapes, addTape, removeTape, updateTapeContent, updateHeads };
+    return { tapes, setTapes, addTape, removeTape, updateTapeContent, updateHeads };
 };
 
 export default useTapes;
