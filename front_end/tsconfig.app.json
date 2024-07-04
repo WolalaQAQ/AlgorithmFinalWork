@@ -21,7 +21,17 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@animation/*": ["src/animation/*"],
+      "@assets/*": ["src/assets/*"],
+      "@class/*": ["src/class/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@pages/*": ["src/pages/*"]
+    }
   },
   "include": ["src"]
 }

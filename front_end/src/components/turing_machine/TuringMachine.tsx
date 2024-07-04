@@ -1,28 +1,27 @@
 import {useState} from 'react';
-import {Alert, Button, Layout, Row, theme} from 'antd';
-import TapeComponent from '../tape/TapeComponent.js';
-
-import useTapes from '../tape/useTapes.js';
-import useIterativeBSFSM from "./fsm/useIterativeBSFSM.tsx";
-import {TapeClass} from "../tape/TapeClass.tsx";
-import {FSMHistory} from "./fsm/IterativeBSFSMClass.tsx";
+import {Alert, Button, Flex, theme, Typography} from 'antd';
+import MultiTapeComponent from "@components/tape/MultiTapeComponent";
+import useTapes from '@hooks/tape/useTapes';
+import {TapeClass} from "@class/tape/TapeClass";
+import {IterativeBNSim} from "@class/turing_machine/simulation/IterativeBNSim.tsx";
+import {IterativeBSFSMStateEntry} from "@class/turing_machine/simulation/IterativeBNSim.tsx";
+import {LeftOutlined, PlayCircleFilled, RightOutlined} from '@ant-design/icons';
 
 const TuringMachine = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [step, setStep] = useState(0);
-    const [fsmHistory, setFsmHistory] = useState<FSMHistory>({});
+    const [fsmHistory, setFsmHistory] = useState<IterativeBSFSMStateEntry[]>([]);
     const {tapes, addTape, removeTape, updateTapeContent, updateHeads} = useTapes([
-        new TapeClass([0, 9, 7, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9], new Set([0])),
+        new TapeClass([0, 9, 5, 0, 1, 2, 3, 4, 6, 7, 8, 9], new Set([0])),
         new TapeClass(),
         new TapeClass(),
     ]);
-    const {fsm, configureTape, reset, calcHistory} = useIterativeBSFSM();
 
     const updateTapes = (step: number) => {
         const current = fsmHistory[step];
-        const inputTape = current.inputTape;
-        const workTape = current.workTape;
-        const resultTape = current.resultTape;
+        const inputTape = current.BSFSMHistoryEntry.inputTape;
+        const workTape = current.BSFSMHistoryEntry.workTape;
+        const resultTape = current.BSFSMHistoryEntry.resultTape;
 
         updateTapeContent(0, inputTape.content);
         updateTapeContent(1, workTape.content);
@@ -49,8 +48,9 @@ const TuringMachine = () => {
         tapes[2] = new TapeClass();
 
         setAlertMessage('');
-        configureTape(tapes[0]);
-        setFsmHistory(calcHistory());
+        const fsm = new IterativeBNSim(tapes[0]);
+        fsm.run();
+        setFsmHistory(fsm.getHistory());
         setStep(0);
     };
 
@@ -73,57 +73,39 @@ const TuringMachine = () => {
     } = theme.useToken();
 
     return (
-        <Layout
-            style={{
-                padding: 20,
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
-            }}
+        <Flex vertical={true} justify={'space-around'} gap={'large'}
+              style={{
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+              }}
         >
-            <Button onClick={addTape} style={{marginBottom: 20, marginTop: 20}}>
-                添加纸带
-            </Button>
-            {tapes.map((tape, index) => (
-                <Layout
-                    key={index}
-                    style={{
-                        background: colorPrimaryBg,
-                        padding: 20,
-                        borderRadius: borderRadiusLG,
-                        marginBottom: 16,
-                    }}
-                >
-                    <TapeComponent
-                        tape={tape}
-                        index={index}
-                        onUpdateTapeContent={updateTapeContent}
-                        onUpdateHeads={updateHeads}
-                        onRemoveTape={removeTape}
-                    />
-                </Layout>
-            ))}
-            <Button onClick={handleRun} type="primary" style={{marginBottom: 20}}>
+            <MultiTapeComponent
+                tapes={tapes}
+                onAddTape={addTape}
+                onRemoveTape={removeTape}
+                onUpdateTapeContent={updateTapeContent}
+                onUpdateHeads={updateHeads}/>
+            <Button onClick={handleRun} type="primary" icon={<PlayCircleFilled/>}>
                 运行
             </Button>
-            <Row gutter={16} justify="center" align="middle">
-                <Button onClick={handlePrevStep} disabled={step === 0}>
+            <Flex gap={'large'} justify={'center'} align={'center'}>
+                <Button onClick={handlePrevStep} disabled={step === 0} icon={<LeftOutlined />}>
                     上一步
                 </Button>
-                <Button onClick={handleNextStep} disabled={step >= Object.keys(fsmHistory).length - 1}>
+                <Button onClick={handleNextStep} disabled={step >= Object.keys(fsmHistory).length - 1} icon={<RightOutlined />}>
                     下一步
                 </Button>
-            </Row>
-            <Layout style={{
-                padding: 20,
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
-                当前步数: {step}
-                <br/>
-                当前状态: {fsmHistory[step]?.state}
-            </Layout>
+            </Flex>
+            <Flex justify={'center'} vertical={true} align={'center'}
+                  style={{
+                      background: colorBgContainer,
+                      borderRadius: borderRadiusLG,
+                  }}>
+                <Typography.Title level={4}>Step: {step}</Typography.Title>
+                <Typography.Text>
+                    {fsmHistory[step] && fsmHistory[step].BSFSMHistoryEntry.state}
+                </Typography.Text>
+            </Flex>
             {alertMessage && (
                 <Alert
                     message="错误"
@@ -134,7 +116,7 @@ const TuringMachine = () => {
                     afterClose={() => setAlertMessage('')}
                 />
             )}
-        </Layout>
+        </Flex>
     );
 };
 

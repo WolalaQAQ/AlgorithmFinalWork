@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './components/home/HomePage.tsx';
-import TuringMachinePage from './components/turing_machine/TuringMachinePage';
-import RecursiveFunctionPage from './components/recursive_function/RecursiveFunctionPage';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import HomePage from '@pages/HomePage'
+import TuringMachinePage from '@pages/TuringMachinePage';
+import RecursiveFunctionPage from '@pages/RecursiveFunctionPage';
 
 function App() {
     return (
