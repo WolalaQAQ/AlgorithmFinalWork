@@ -59,6 +59,7 @@ export class BacktrackKPSim {
         if (this.items_[index].weight > remainingCapacity) {
             const result = this.recursiveHelper(index - 1, remainingCapacity);
             this.setStateAndSaveAll(StatesBacktrackKP.OVER_WEIGHT);
+            this.stack_.pop();
             return result;
         } else {
             // 情况1：不包括当前物品
@@ -70,6 +71,7 @@ export class BacktrackKPSim {
             const include = this.items_[index].value + this.recursiveHelper(index - 1, remainingCapacity - this.items_[index].weight);
             // 返回包括或不包括当前物品的最大值
             this.setStateAndSaveAll(StatesBacktrackKP.CALC_MAX);
+            this.stack_.pop();
             return Math.max(exclude, include);
         }
     }

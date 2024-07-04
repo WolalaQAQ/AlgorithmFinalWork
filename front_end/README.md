@@ -1,30 +1,48 @@
-# React + TypeScript + Vite
+- # AlgorithmFinalWork
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+  ## 问题描述
 
-Currently, two official plugins are available:
+  ### 图灵机与递归函数仿真
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  ### Turing Machine & Recursive Function Simulator
 
-## Expanding the ESLint configuration
+  一. 具体任务
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+  - 图灵机仿真系统：
+    1. 对有限状态自动机及其状态转移过程进行仿真；
+    2. 对纸带及读写头的读、写操作进行仿真。评价指标：现场运行并演示给定输入时二分搜索算法在仿真系统中的动态执行过程，给出正确结果，并对所使用的纸带空间和步数进行计数。
+  - 递归函数仿真系统：
+    1. 对递归函数的调用过程进行仿真；
+    2. 对stack及push、pop操作进行仿真。评价指标：现场运行并演示给定输入时二分搜索算法在仿真系统中的动态执行过程，给出正确结果，并对所使用的纸带空间、栈的空间以及步数进行计数。
+  - 两种仿真系统的性能对比分析：给定一个0/1背包问题
+    1. 在图灵机仿真系统中分别采用动态规划和分支限界求解；
+    2. 在递归函数仿真系统中分别采用备忘录和回溯求解。评价指标：现场运行并演示给定输入时上述算法在两种仿真系统中的动态求解过程，给出最优值和最优解，并对比上述算法所使用的纸带和/或栈空间、以及步数。
 
-- Configure the top-level `parserOptions` property like this:
+  ## 架构设计
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+  采用Web开发路线。原定为前后端分离架构，但因时间原因，再加上最开始读错题意，导致写错了，浪费了一周时间。最终只有前端。
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+  前端采用React + TypeScript + Vite框架，项目结构如下：
+
+  | 目录                           | 描述                                      |
+  | ------------------------------ | ----------------------------------------- |
+  | [animation](./src/animation)   | 动画目录，包括了一个开屏动画              |
+  | [class](./src/class)           | 包括各种类的实现，主要逻辑部分在这里      |
+  | [components](./src/components) | 包括React组件的实现，主要可视化部分在这里 |
+  | [hooks](./src/hooks)           | 自定义Hooks，契合React的函数式组件写法    |
+  | [pages](./src/pages)           | 各个页面的React组件实现                   |
+
+  ## How to run
+
+  执行以下命令
+
+  ```shell
+  npm install
+  npm run dev
+  ```
+
+  然后打开Vite提供的页面即可。
+
+  有兴趣可以打包成Electron桌面应用，由于时间原因，这里没有做。
+
+  
