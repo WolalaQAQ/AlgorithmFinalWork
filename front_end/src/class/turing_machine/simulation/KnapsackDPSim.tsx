@@ -3,7 +3,7 @@ import { StatesKPDP } from "@class/fsm/knapsack/iterative/StatesKPDP.tsx";
 import {KnapsackDPFSM, KPDPFSMStateEntry} from "@class/fsm/knapsack/iterative/KnapsackDPFSM.tsx";
 
 export interface KnapsackDPSimStateEntry {
-    KPFSMHistoryEntry: KPDPFSMStateEntry;
+    KPDPFSMStateEntry: KPDPFSMStateEntry;
 }
 
 export class KnapsackDPSim {
@@ -52,7 +52,7 @@ export class KnapsackDPSim {
     getHistory(): KnapsackDPSimStateEntry[] {
         const history = this.fsm_.getHistory();
         for (let i = 0; i < history.length; i++) {
-            this.fsmHistory_.push({ KPFSMHistoryEntry: history[i] });
+            this.fsmHistory_.push({ KPDPFSMStateEntry: history[i] });
         }
         return this.fsmHistory_;
     }

@@ -50,9 +50,11 @@ export class KnapsackDPFSM {
                     this.step_++;
                 }
                 break;
-            case StatesKPDP.FINISH:
+            case StatesKPDP.WRITE_RESULT:
                 this.resultTape_.heads = new Set([0]);
                 this.resultTape_.content[0] = this.dpTape_.content[this.capacityTape_.content[0]];
+                break;
+            case StatesKPDP.FINISH:
                 break;
             default:
                 console.error('Unknown state:', newState);

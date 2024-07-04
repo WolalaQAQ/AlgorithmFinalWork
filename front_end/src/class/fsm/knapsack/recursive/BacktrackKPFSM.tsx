@@ -1,72 +1,65 @@
-// KnapsackBBFSM.tsx
-import {StatesKPBB} from "@class/fsm/knapsack/iterative/StatesKPBB.tsx";
 import {TapeClass} from "@class/tape/TapeClass.tsx";
+import {StatesBacktrackKP} from "@class/fsm/knapsack/recursive/StatesBacktrackKP.tsx";
 
-export interface KPBBFSMStateEntry {
+export interface BacktrackKPFSMStateEntry {
     state: string;
     step: number;
     capacityTape: TapeClass;
     itemsTape: TapeClass;
-    queueTape: TapeClass;
     resultTape: TapeClass;
 }
 
-export class KnapsackBBFSM {
+export class BacktrackKPFSM {
     public state_: string;
     public step_: number;
     public capacityTape_: TapeClass;
     public itemsTape_: TapeClass;
-    public queueTape_: TapeClass;
+    public memoTape_: TapeClass;
     public resultTape_: TapeClass;
-    private history_: KPBBFSMStateEntry[] = [];
+    private history_: BacktrackKPFSMStateEntry[] = [];
 
     constructor(capacityTape: TapeClass, itemsTape: TapeClass) {
-        this.state_ = StatesKPBB.START;
+        this.state_ = StatesBacktrackKP.START;
         this.step_ = 0;
         this.capacityTape_ = capacityTape.clone();
         this.itemsTape_ = itemsTape.clone();
-        this.queueTape_ = new TapeClass();
+        this.memoTape_ = new TapeClass(Array(capacityTape.content[0] + 1).fill(-1)); // Initialize DP table
         this.resultTape_ = new TapeClass([0]);
     }
 
-    setStateAndSave(newState: string, content: number = -1) {
+    setStateAndSave(newState: string, content: number = -1, anotherContent: number = -1) {
         this.state_ = newState;
-
         switch (newState) {
-            case StatesKPBB.START:
+            case StatesBacktrackKP.START:
                 break;
-            case StatesKPBB.READ_CAPACITY:
+            case StatesBacktrackKP.READ_CAPACITY:
                 this.capacityTape_.heads = new Set([0]);
                 break;
-            case StatesKPBB.READ_ITEM_WEIGHT:
+            case StatesBacktrackKP.READ_ITEM_WEIGHT:
                 this.itemsTape_.heads = new Set([content * 2]);
                 break;
-            case StatesKPBB.READ_ITEM_VALUE:
+            case StatesBacktrackKP.READ_ITEM_VALUE:
                 this.itemsTape_.heads = new Set([content * 2 + 1]);
                 break;
-            case StatesKPBB.WRITE_RESULT:
+            case StatesBacktrackKP.TRY_INCLUDE:
+                break;
+            case StatesBacktrackKP.TRY_EXCLUDE:
+                break;
+            case StatesBacktrackKP.NO_MORE_ITEMS:
+                break;
+            case StatesBacktrackKP.KNAPSACK_FULL:
+                break;
+            case StatesBacktrackKP.WRITE_RESULT:
                 this.resultTape_.heads = new Set([0]);
                 this.resultTape_.content[0] = content;
                 break;
-            case StatesKPBB.QUEUE_PUSH:
-                this.queueTape_.content.push(content);
+            case StatesBacktrackKP.OVER_WEIGHT:
                 break;
-            case StatesKPBB.QUEUE_POP:
-                this.queueTape_.content.shift();
-                break;
-            case StatesKPBB.TRY_INCLUDE:
-                break;
-            case StatesKPBB.TRY_EXCLUDE:
-                break;
-            case StatesKPBB.CALC_BOUND:
-                break;
-            case StatesKPBB.FINISH:
-                this.resultTape_.heads = new Set([0]);
-                this.resultTape_.content[0] = content;
+            case StatesBacktrackKP.CALC_MAX:
+            case StatesBacktrackKP.FINISH:
                 break;
             default:
                 console.error('Unknown state:', newState);
-                break;
         }
         this.saveState();
         this.step_++;
@@ -78,8 +71,7 @@ export class KnapsackBBFSM {
             state: this.state_,
             capacityTape: this.capacityTape_.clone(),
             itemsTape: this.itemsTape_.clone(),
-            queueTape: this.queueTape_.clone(),
-            resultTape: this.resultTape_.clone(),
+            resultTape: this.resultTape_.clone()
         });
     }
 

@@ -143,8 +143,10 @@ export class KnapsackBBSim {
         }
         // Solve the Knapsack problem using Branch and Bound
         const res = this.knapsackBranchAndBound(this.items_.map(item => item.weight), this.items_.map(item => item.value), this.capacity_);
+        // Write Result
+        this.fsm_.setStateAndSave(StatesKPBB.WRITE_RESULT, res);
         // Finish
-        this.fsm_.setStateAndSave(StatesKPBB.FINISH, res);
+        this.fsm_.setStateAndSave(StatesKPBB.FINISH);
     }
 
     getHistory(): KnapsackBBSimStateEntry[] {

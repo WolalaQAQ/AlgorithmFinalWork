@@ -19,6 +19,7 @@ import {KnapsackDPSim, KnapsackDPSimStateEntry} from "@class/turing_machine/simu
 // 背包BB
 import {KnapsackBBSim, KnapsackBBSimStateEntry} from "@class/turing_machine/simulation/KnapsackBBSim.tsx";
 
+
 const TuringMachine = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [step, setStep] = useState(0);
@@ -68,9 +69,9 @@ const TuringMachine = () => {
     const updateTapes = (step: number) => {
         if (selectedAlgorithm === 'binary_search') {
             const current = bsHistory[step];
-            const inputTape = current.BSFSMHistoryEntry.inputTape;
-            const workTape = current.BSFSMHistoryEntry.workTape;
-            const resultTape = current.BSFSMHistoryEntry.resultTape;
+            const inputTape = current.BSFSMStateEntry.inputTape;
+            const workTape = current.BSFSMStateEntry.workTape;
+            const resultTape = current.BSFSMStateEntry.resultTape;
             updateTapeContent(0, inputTape.content);
             updateTapeContent(1, workTape.content);
             updateTapeContent(2, resultTape.content);
@@ -79,10 +80,10 @@ const TuringMachine = () => {
             updateHeads(2, resultTape.heads);
         } else if (selectedAlgorithm === 'knapsack_dp') {
             const current = dpHistory[step];
-            const capacityTape = current.KPFSMHistoryEntry.capacityTape;
-            const itemsTape = current.KPFSMHistoryEntry.itemsTape;
-            const dpTape = current.KPFSMHistoryEntry.dpTape;
-            const resultTape = current.KPFSMHistoryEntry.resultTape;
+            const capacityTape = current.KPDPFSMStateEntry.capacityTape;
+            const itemsTape = current.KPDPFSMStateEntry.itemsTape;
+            const dpTape = current.KPDPFSMStateEntry.dpTape;
+            const resultTape = current.KPDPFSMStateEntry.resultTape;
             updateTapeContent(0, capacityTape.content);
             updateTapeContent(1, itemsTape.content);
             updateTapeContent(2, dpTape.content);
@@ -171,13 +172,13 @@ const TuringMachine = () => {
             if (step < bsHistory.length - 1) {
                 setStep(step + 1);
                 updateTapes(step + 1);
-                setStateText(bsHistory[step + 1].BSFSMHistoryEntry.state)
+                setStateText(bsHistory[step + 1].BSFSMStateEntry.state)
             }
         } else if (selectedAlgorithm === 'knapsack_dp') {
             if (step < dpHistory.length - 1) {
                 setStep(step + 1);
                 updateTapes(step + 1);
-                setStateText(dpHistory[step + 1].KPFSMHistoryEntry.state)
+                setStateText(dpHistory[step + 1].KPDPFSMStateEntry.state)
             }
         } else if (selectedAlgorithm === 'knapsack_bb') {
             if (step < bbHistory.length - 1) {
@@ -193,13 +194,13 @@ const TuringMachine = () => {
             if (step > 0) {
                 setStep(step - 1);
                 updateTapes(step - 1);
-                setStateText(bsHistory[step - 1].BSFSMHistoryEntry.state)
+                setStateText(bsHistory[step - 1].BSFSMStateEntry.state)
             }
         } else if (selectedAlgorithm === 'knapsack_dp') {
             if (step > 0) {
                 setStep(step - 1);
                 updateTapes(step - 1);
-                setStateText(dpHistory[step - 1].KPFSMHistoryEntry.state)
+                setStateText(dpHistory[step - 1].KPDPFSMStateEntry.state)
             }
         } else if (selectedAlgorithm === 'knapsack_bb') {
             if (step > 0) {

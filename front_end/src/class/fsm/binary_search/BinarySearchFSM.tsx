@@ -1,4 +1,4 @@
-import {StatesBN} from "@class/fsm/binary_search/StatesBN.tsx";
+import {StatesBS} from "@class/fsm/binary_search/StatesBS.tsx";
 import {TapeClass} from "@class/tape/TapeClass.tsx";
 
 export interface BSFSMStateEntry {
@@ -19,7 +19,7 @@ export class BinarySearchFSM {
     private history_: BSFSMStateEntry[] = [];
 
     constructor(inputTape: TapeClass) {
-        this.state_ = StatesBN.START;
+        this.state_ = StatesBS.START;
         this.step_ = 0;
         this.inputTape_ = inputTape.clone();
         this.inputArray_ = this.inputTape_.content.slice(3, this.inputTape_.content.length);
@@ -30,43 +30,43 @@ export class BinarySearchFSM {
     setStateAndSave(newState: string, value : number = -1) {
         this.state_ = newState;
         switch (newState) {
-            case StatesBN.START:
+            case StatesBS.START:
                 break;
-            case StatesBN.READ_TARGET:
+            case StatesBS.READ_TARGET:
                 this.inputTape_.heads = new Set([2]);
                 break;
-            case StatesBN.READ_INIT_LOW:
+            case StatesBS.READ_INIT_LOW:
                 this.inputTape_.heads = new Set([0]);
                 break;
-            case StatesBN.READ_INIT_HIGH:
+            case StatesBS.READ_INIT_HIGH:
                 this.inputTape_.heads = new Set([1]);
                 break;
-            case StatesBN.READ_LOW:
+            case StatesBS.READ_LOW:
                 this.workTape_.heads = new Set([0]);
                 break;
-            case StatesBN.READ_HIGH:
+            case StatesBS.READ_HIGH:
                 this.workTape_.heads = new Set([2]);
                 break;
-            case StatesBN.WRITE_LOW:
+            case StatesBS.WRITE_LOW:
                 this.workTape_.heads = new Set([0]);
                 this.workTape_.content[0] = value;
                 break;
-            case StatesBN.WRITE_HIGH:
+            case StatesBS.WRITE_HIGH:
                 this.workTape_.heads = new Set([2]);
                 this.workTape_.content[2] = value;
                 break;
-            case StatesBN.CALC_MID:
+            case StatesBS.CALC_MID:
                 this.workTape_.heads = new Set([1]);
                 this.workTape_.content[1] = value;
                 break;
-            case StatesBN.COMPARE:
+            case StatesBS.COMPARE:
                 this.inputTape_.heads = new Set([value + 3]);
                 break;
-            case StatesBN.SUCCESS:
+            case StatesBS.SUCCESS:
                 break;
-            case StatesBN.FAIL:
+            case StatesBS.FAIL:
                 break;
-            case StatesBN.FINISH:
+            case StatesBS.FINISH:
                 this.resultTape_.heads = new Set([0]);
                 this.resultTape_.content[0] = value;
                 break;

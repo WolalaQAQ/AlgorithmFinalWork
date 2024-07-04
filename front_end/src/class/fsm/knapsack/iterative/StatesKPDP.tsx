@@ -4,5 +4,6 @@ export const StatesKPDP = Object.freeze({
     READ_ITEM_WEIGHT: 'qReadItemWeight',
     READ_ITEM_VALUE: 'qReadItemValue',
     UPDATE_DP: 'qUpdateDP',
+    WRITE_RESULT: 'qWriteResult',
     FINISH: 'qFinish'
 });

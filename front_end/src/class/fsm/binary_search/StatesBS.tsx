@@ -1,4 +1,4 @@
-export const StatesBN = Object.freeze({
+export const StatesBS = Object.freeze({
     START: 'qStart',
     READ_INIT_LOW: 'qReadInitLow',
     READ_INIT_HIGH: 'qReadInitHigh',
