@@ -1,9 +1,9 @@
 // React
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 // Ant Design
 import {Alert, Button, Flex, Select, theme, Typography} from 'antd';
-import {LeftOutlined, PlayCircleFilled, RightOutlined} from '@ant-design/icons';
+import {LeftOutlined, PlayCircleFilled, RightOutlined, PauseCircleFilled} from '@ant-design/icons';
 
 // 纸带
 import MultiTapeComponent from "@components/tape/MultiTapeComponent";
@@ -37,10 +37,27 @@ const TuringMachine = () => {
     const [dpHistory, setDpHistory] = useState<KnapsackDPSimStateEntry[]>([]);
     const [bbHistory, setBbHistory] = useState<KnapsackBBSimStateEntry[]>([]);
 
+    // 自动播放
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [intervalTime, setIntervalTime] = useState(200);
+
+    useEffect(() => {
+        let timer: string | number | NodeJS.Timeout | undefined;
+        if (isPlaying) {
+            timer = setInterval(() => {
+                handleNextStep();
+            }, intervalTime);
+        } else if (!isPlaying && timer) {
+            clearInterval(timer);
+        }
+        return () => clearInterval(timer);
+    }, [isPlaying, intervalTime, step]);
+
 
     const handleSelectAlgorithm = (value: string) => {
         setSelectedAlgorithm(value);
         setStep(0);
+        setIsPlaying(false);
 
         if (value === 'binary_search') {
             setTapes([
@@ -236,6 +253,9 @@ const TuringMachine = () => {
             <Flex gap={'large'} justify={'center'} align={'center'}>
                 <Button onClick={handlePrevStep} disabled={handlePrevDisabled()} icon={<LeftOutlined/>}>
                     上一步
+                </Button>
+                <Button onClick={() => setIsPlaying(!isPlaying)} type="primary" icon={isPlaying ? <PauseCircleFilled /> : <PlayCircleFilled />}>
+                    {isPlaying ? '暂停' : '播放'}
                 </Button>
                 <Button onClick={handleNextStep} disabled={handleNextDisabled()} icon={<RightOutlined/>}>
                     下一步

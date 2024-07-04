@@ -61,8 +61,6 @@ export class KnapsackBBFSM {
             case StatesKPBB.CALC_BOUND:
                 break;
             case StatesKPBB.FINISH:
-                this.resultTape_.heads = new Set([0]);
-                this.resultTape_.content[0] = content;
                 break;
             default:
                 console.error('Unknown state:', newState);

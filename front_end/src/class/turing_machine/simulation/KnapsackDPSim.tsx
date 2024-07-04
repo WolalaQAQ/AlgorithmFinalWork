@@ -35,8 +35,10 @@ export class KnapsackDPSim {
 
         // Iterative Dynamic Programming for Knapsack
         const res = this.iterativeDP();
+        // Write Result
+        this.fsm_.setStateAndSave(StatesKPDP.WRITE_RESULT, res);
         // Finish
-        this.fsm_.setStateAndSave(StatesKPDP.FINISH, res);
+        this.fsm_.setStateAndSave(StatesKPDP.FINISH);
     }
 
     iterativeDP() {
