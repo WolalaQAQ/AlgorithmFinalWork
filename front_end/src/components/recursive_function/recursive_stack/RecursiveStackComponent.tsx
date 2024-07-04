@@ -23,7 +23,7 @@ const RecursiveStackComponent: React.FC<RecursiveStackComponentProps> = ({
                 dataSource={[...stack].reverse()} // 反转数组以倒序显示
                 renderItem={(item, index) => (
                     <List.Item key={index}>
-                        binarySearch({item.low}, {item.high})
+                        ({item.low}, {item.high})
                     </List.Item>
                 )}
                 style={{marginTop: 20}}

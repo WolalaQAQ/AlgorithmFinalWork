@@ -1,8 +1,8 @@
 import { TapeClass } from '@class/tape/TapeClass';
-import { StatesKPDP } from "@class/fsm/knapsack/StatesKPDP.tsx";
-import {KnapsackDPFSM, KPDPFSMStateEntry} from "@class/fsm/knapsack/KnapsackDPFSM.tsx";
+import { StatesKPDP } from "@class/fsm/knapsack/iterative/StatesKPDP.tsx";
+import {KnapsackDPFSM, KPDPFSMStateEntry} from "@class/fsm/knapsack/iterative/KnapsackDPFSM.tsx";
 
-export interface KnapsackDPFSMStateEntry {
+export interface KnapsackDPSimStateEntry {
     KPFSMHistoryEntry: KPDPFSMStateEntry;
 }
 
@@ -12,7 +12,7 @@ export class KnapsackDPSim {
     private currentItemIndex_: number;
     private items_: Array<{ weight: number, value: number }>;
 
-    private fsmHistory_: KnapsackDPFSMStateEntry[] = [];
+    private fsmHistory_: KnapsackDPSimStateEntry[] = [];
 
     constructor(capacityTape: TapeClass, itemsTape: TapeClass) {
         this.fsm_ = new KnapsackDPFSM(capacityTape, itemsTape);
@@ -49,7 +49,7 @@ export class KnapsackDPSim {
         return this.fsm_.dpTape_.content[this.capacity_];
     }
 
-    getHistory(): KnapsackDPFSMStateEntry[] {
+    getHistory(): KnapsackDPSimStateEntry[] {
         const history = this.fsm_.getHistory();
         for (let i = 0; i < history.length; i++) {
             this.fsmHistory_.push({ KPFSMHistoryEntry: history[i] });

@@ -14,7 +14,10 @@ import {TapeClass} from "@class/tape/TapeClass";
 import {IterativeBSSim, IterativeBSFSMStateEntry} from "@class/turing_machine/simulation/IterativeBSSim.tsx";
 
 // 背包DP
-import {KnapsackDPSim, KnapsackDPFSMStateEntry} from "@class/turing_machine/simulation/KnapsackDPSim.tsx";
+import {KnapsackDPSim, KnapsackDPSimStateEntry} from "@class/turing_machine/simulation/KnapsackDPSim.tsx";
+
+// 背包BB
+import {KnapsackBBSim, KnapsackBBSimStateEntry} from "@class/turing_machine/simulation/KnapsackBBSim.tsx";
 
 const TuringMachine = () => {
     const [alertMessage, setAlertMessage] = useState('');
@@ -22,11 +25,16 @@ const TuringMachine = () => {
     const {tapes, setTapes, addTape, removeTape, updateTapeContent, updateHeads} = useTapes([]);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState('');
     const [stateText, setStateText] = useState('');
-    const options = [{value: 'binary_search', label: '二分搜索'}, {value: 'knapsack_dp', label: '背包DP'}];
+    const options = [
+        {value: 'binary_search', label: '二分搜索'},
+        {value: 'knapsack_dp', label: '背包DP'},
+        {value: 'knapsack_bb', label: '背包BB'},
+    ];
 
     // 各个算法的历史状态记录
     const [bsHistory, setBsHistory] = useState<IterativeBSFSMStateEntry[]>([]);
-    const [dpHistory, setDpHistory] = useState<KnapsackDPFSMStateEntry[]>([]);
+    const [dpHistory, setDpHistory] = useState<KnapsackDPSimStateEntry[]>([]);
+    const [bbHistory, setBbHistory] = useState<KnapsackBBSimStateEntry[]>([]);
 
 
     const handleSelectAlgorithm = (value: string) => {
@@ -40,7 +48,7 @@ const TuringMachine = () => {
                 new TapeClass()
             ]);
             setBsHistory([]);
-        } else if (value === 'knapsack_dp') {
+        } else if (value === 'knapsack_dp' || value === 'knapsack_bb') {
             setTapes([
                 new TapeClass([50]),
                 new TapeClass([
@@ -83,6 +91,20 @@ const TuringMachine = () => {
             updateHeads(1, itemsTape.heads);
             updateHeads(2, dpTape.heads);
             updateHeads(3, resultTape.heads);
+        } else if (selectedAlgorithm === 'knapsack_bb') {
+            const current = bbHistory[step];
+            const capacityTape = current.KPBBFSMStateEntry.capacityTape;
+            const itemsTape = current.KPBBFSMStateEntry.itemsTape;
+            const boundTape = current.KPBBFSMStateEntry.queueTape;
+            const resultTape = current.KPBBFSMStateEntry.resultTape;
+            updateTapeContent(0, capacityTape.content);
+            updateTapeContent(1, itemsTape.content);
+            updateTapeContent(2, boundTape.content);
+            updateTapeContent(3, resultTape.content);
+            updateHeads(0, capacityTape.heads);
+            updateHeads(1, itemsTape.heads);
+            updateHeads(2, boundTape.heads);
+            updateHeads(3, resultTape.heads);
         }
     }
 
@@ -97,9 +119,9 @@ const TuringMachine = () => {
             tapes[2] = new TapeClass();
 
             setAlertMessage('');
-            const fsm = new IterativeBSSim(tapes[0]);
-            fsm.run();
-            setBsHistory(fsm.getHistory());
+            const bsSim = new IterativeBSSim(tapes[0]);
+            bsSim.run();
+            setBsHistory(bsSim.getHistory());
             setStep(0);
         } else if (selectedAlgorithm === 'knapsack_dp') {
             if (tapes[0].content.length < 1 || tapes[1].content.length < 2 || tapes[1].content.length % 2 !== 0 || tapes[1].content.length < 2) {
@@ -108,10 +130,24 @@ const TuringMachine = () => {
             }
 
             setAlertMessage('');
-            const fsm = new KnapsackDPSim(tapes[0], tapes[1]);
-            fsm.run();
-            setDpHistory(fsm.getHistory());
+            const dpSim = new KnapsackDPSim(tapes[0], tapes[1]);
+            dpSim.run();
+            setDpHistory(dpSim.getHistory());
             setStep(0);
+        } else if (selectedAlgorithm === 'knapsack_bb') {
+            if (tapes[0].content.length < 1 || tapes[1].content.length < 2 || tapes[1].content.length % 2 !== 0 || tapes[1].content.length < 2) {
+                setAlertMessage('请添加合法的纸带');
+                return;
+            }
+
+            setAlertMessage('');
+            const fsm = new KnapsackBBSim(tapes[0], tapes[1]);
+            fsm.run();
+            setBbHistory(fsm.getHistory());
+            setStep(0);
+            // const bbSim = new KnapsackBBSim();
+            // const res = bbSim.knapsackBranchAndBound([5, 15, 25, 27, 30], [12, 30, 44, 46, 50], 50);
+            // console.log(res);
         }
     };
 
@@ -120,6 +156,8 @@ const TuringMachine = () => {
             return(step === bsHistory.length - 1);
         } else if (selectedAlgorithm === 'knapsack_dp') {
             return(step === dpHistory.length - 1);
+        } else if (selectedAlgorithm === 'knapsack_bb') {
+            return (step === bbHistory.length - 1);
         }
         return true;
     }
@@ -141,6 +179,12 @@ const TuringMachine = () => {
                 updateTapes(step + 1);
                 setStateText(dpHistory[step + 1].KPFSMHistoryEntry.state)
             }
+        } else if (selectedAlgorithm === 'knapsack_bb') {
+            if (step < bbHistory.length - 1) {
+                setStep(step + 1);
+                updateTapes(step + 1);
+                setStateText(bbHistory[step + 1].KPBBFSMStateEntry.state)
+            }
         }
     };
 
@@ -156,6 +200,12 @@ const TuringMachine = () => {
                 setStep(step - 1);
                 updateTapes(step - 1);
                 setStateText(dpHistory[step - 1].KPFSMHistoryEntry.state)
+            }
+        } else if (selectedAlgorithm === 'knapsack_bb') {
+            if (step > 0) {
+                setStep(step - 1);
+                updateTapes(step - 1);
+                setStateText(bbHistory[step - 1].KPBBFSMStateEntry.state)
             }
         }
     };

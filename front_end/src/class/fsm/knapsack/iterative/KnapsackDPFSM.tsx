@@ -1,4 +1,4 @@
-import { StatesKPDP } from "@class/fsm/knapsack/StatesKPDP.tsx";
+import { StatesKPDP } from "@class/fsm/knapsack/iterative/StatesKPDP.tsx";
 import { TapeClass } from "@class/tape/TapeClass.tsx";
 
 export interface KPDPFSMStateEntry {
