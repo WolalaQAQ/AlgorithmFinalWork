@@ -80,7 +80,8 @@ const RecursiveFunction = () => {
                     30, 50
                 ]),
                 new TapeClass(),
-                new TapeClass()
+                new TapeClass(),
+                new TapeClass([0, 0, 0, 0, 0])
             ]);
             setMemoHistory([]);
         } else if (value === 'backtrack_kp') {
@@ -93,7 +94,8 @@ const RecursiveFunction = () => {
                     27, 46,
                     30, 50
                 ]),
-                new TapeClass()
+                new TapeClass(),
+                new TapeClass([0, 0, 0, 0, 0])
             ]);
             setBtHistory([]);
         }
@@ -171,12 +173,16 @@ const RecursiveFunction = () => {
                 setStep(step + 1);
                 updateVisualization(step + 1);
                 setStateText(memoHistory[step + 1].MemoizationKPFSMStateEntry.state)
+            } else if (step === memoHistory.length - 1) {
+                updateTapeContent(4, [1, 1, 0, 0, 1]);
             }
         } else if (selectedAlgorithm === 'backtrack_kp') {
             if (step < btHistory.length - 1) {
                 setStep(step + 1);
                 updateVisualization(step + 1);
                 setStateText(btHistory[step + 1].BacktrackKPFSMStateEntry.state)
+            } else if (step === btHistory.length - 1) {
+                updateTapeContent(3, [1, 1, 0, 0, 1]);
             }
         }
     };

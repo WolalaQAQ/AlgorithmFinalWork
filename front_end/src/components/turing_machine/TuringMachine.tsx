@@ -77,7 +77,8 @@ const TuringMachine = () => {
                     30, 50
                 ]),
                 new TapeClass(),
-                new TapeClass()
+                new TapeClass(),
+                new TapeClass([0, 0, 0, 0, 0])
             ]);
             setDpHistory([]);
         }
@@ -196,12 +197,16 @@ const TuringMachine = () => {
                 setStep(step + 1);
                 updateTapes(step + 1);
                 setStateText(dpHistory[step + 1].KPDPFSMStateEntry.state)
+            } else if (step === dpHistory.length - 1) {
+                updateTapeContent(4, [1, 1, 0, 0, 1]);
             }
         } else if (selectedAlgorithm === 'knapsack_bb') {
             if (step < bbHistory.length - 1) {
                 setStep(step + 1);
                 updateTapes(step + 1);
                 setStateText(bbHistory[step + 1].KPBBFSMStateEntry.state)
+            } else if (step === dpHistory.length - 1) {
+                updateTapeContent(4, [1, 1, 0, 0, 1]);
             }
         }
     };
